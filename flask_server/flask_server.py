@@ -22,7 +22,6 @@ def face_recognition_endpoint():
     
     image_path = "./uploads/" + file.filename
     unique_id = get_face_locations(image_path)
-
     os.remove(file_path)
 
     return jsonify({"unique_id": unique_id})
