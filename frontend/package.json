@@ -9,10 +9,12 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@rive-app/react-canvas": "^4.6.2",
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18",
-    "react-webcam": "^7.2.0"
+    "react-webcam": "^7.2.0",
+    "rive-react": "^4.6.2"
   },
   "devDependencies": {
     "@types/node": "^20",
