@@ -10,17 +10,13 @@ import (
 	"net/http"
 )
 
-type LoginJson struct {
-	Unique_id string `json:"unique_id"`
-}
-
 func handleLogin(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
-	// Parse the form data, including the file
+	// Parse the for`m data, including the file
 	err := r.ParseMultipartForm(10 << 20) // 10 MB is the max file size in this example
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Error parsing form: %v", err), http.StatusBadRequest)
@@ -89,4 +85,5 @@ func main() {
 	http.HandleFunc("/login", handleLogin)
 	fmt.Println("Listening on port 8080")
 	log.Println(http.ListenAndServe(":8080", nil))
+
 }

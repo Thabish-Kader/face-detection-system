@@ -1,13 +1,14 @@
-import Image from "next/image";
 import { MyWebcam } from "@/components/MyWebcam";
-import Link from "next/link";
+import { useCallback, useRef, useState } from "react";
+import Webcam from "react-webcam";
+
 import { RiveCanvas } from "@/components/RiveCanvas";
+import { FaceLogin } from "@/components/FaceLogin";
 
 export default function Home() {
   return (
-    <main className="">
-      {/* <MyWebcam /> */}
-      <RiveCanvas />
+    <main className="relative">
+      <FaceLogin />
     </main>
   );
 }
