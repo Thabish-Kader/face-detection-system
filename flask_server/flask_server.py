@@ -11,7 +11,6 @@ app = Flask(__name__)
 @app.route("/face_recognition", methods=["POST"])
 def face_recognition_endpoint():
     data = request.get_json()
-    print(data)
     user_picture_name = data.get('data', '')
     if not user_picture_name:
         return jsonify({"error": 'No Picture found in folder'})
