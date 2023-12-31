@@ -1,9 +1,12 @@
 import express from "express";
 import mutler from "multer";
 import axios from "axios";
-import fs from "fs";
+import { FLASK_ENDPOINT, PORT } from "./constants";
+// import { mutlerMiddleware, storage } from "./middleware/mutlerMiddlesware";
 const app = express();
-const PORT = 8080;
+
+app.use(mutler);
+const mutlerMiddleware = express.Router();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -21,7 +24,6 @@ const upload = mutler({ storage: storage });
 
 app.post("/login", upload.single("file"), async (req, res) => {
   const { file } = req;
-  const FLASK_ENDPOINT = "http://127.0.0.1:5000/face_recognition";
 
   if (!file) {
     res.status(400).json({ error: "No file found" });
