@@ -6,7 +6,11 @@
       "skipLibCheck": true,
       "forceConsistentCasingInFileNames": true,
       "moduleResolution":"node",
-      "outDir": "./dist"
+      "outDir": "./dist",
+      "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"]
+    },
     },
     "ts-node": {
         "swc": true

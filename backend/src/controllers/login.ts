@@ -9,7 +9,6 @@ const loginController = async (req: Request, res: Response) => {
     res.status(400).json({ error: "No file found" });
     return;
   }
-
   try {
     const flaskResponse = await axios.post(FLASK_ENDPOINT, {
       data: file?.filename,
