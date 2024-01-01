@@ -1,11 +1,18 @@
 "use client";
-import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import RiveComponent, { useRive } from "@rive-app/react-canvas";
+import { sendUserPic } from "@/utils/apis";
 
 type RiveCanvasProps = {
   setIsWebcamOn: Dispatch<SetStateAction<boolean>>;
   isWebcamOn: boolean;
-  capture: () => void;
+  capture: (n: number) => File | null;
 };
 
 export const RiveCanvas = ({
@@ -22,7 +29,12 @@ export const RiveCanvas = ({
   });
 
   let captureCount = 0;
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
+
+  const sendUserPics = async () => {
+    await sendUserPic(imageFiles);
+  };
 
   const handleCapturePhoto = () => {
     if (isWebcamOn) {
@@ -32,17 +44,28 @@ export const RiveCanvas = ({
 
     if (intervalIdRef.current === null) {
       intervalIdRef.current = setInterval(() => {
-        capture();
+        const file = capture(captureCount);
         captureCount++;
-
+        if (file) {
+          setImageFiles(
+            (prevFiles) => [...prevFiles, file].filter(Boolean) as File[]
+          );
+        }
         if (captureCount === 5) {
           setIsWebcamOn(false);
           clearInterval(intervalIdRef.current!);
           intervalIdRef.current = null;
+          captureCount = 0;
         }
       }, 2000);
     }
   };
+
+  useEffect(() => {
+    if (imageFiles?.length === 5) {
+      sendUserPic(imageFiles);
+    }
+  }, [imageFiles]);
 
   useEffect(() => {
     return () => {
