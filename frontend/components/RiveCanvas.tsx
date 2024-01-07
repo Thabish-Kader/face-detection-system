@@ -32,10 +32,6 @@ export const RiveCanvas = ({
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
 
-  const sendUserPics = async () => {
-    await sendUserPic(imageFiles);
-  };
-
   const handleCapturePhoto = () => {
     if (isWebcamOn) {
       return;

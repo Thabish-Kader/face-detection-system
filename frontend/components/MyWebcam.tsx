@@ -16,8 +16,6 @@ type MyWebcamProps = {
 };
 
 export const MyWebcam = ({ webcamRef, isWebcamOn }: MyWebcamProps) => {
-  const [image, setImage] = useState();
-
   return (
     <div>
       {isWebcamOn && (

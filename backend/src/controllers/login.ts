@@ -1,23 +1,30 @@
 import axios from "axios";
 import { Request, Response } from "express";
-import { FLASK_ENDPOINT } from "../constants";
+import { FAST_API_ENDPOINT, PORT } from "@/constants";
+import fs from "fs";
 
-const loginController = async (req: Request, res: Response) => {
-  const { file } = req;
-
-  if (!file) {
-    res.status(400).json({ error: "No file found" });
-    return;
-  }
+const loginContoller = async (req: Request, res: Response) => {
   try {
-    const flaskResponse = await axios.post(FLASK_ENDPOINT, {
-      data: file?.filename,
-    });
-    const unique_id = flaskResponse.data;
-    res.status(200).json(unique_id);
-  } catch (err) {
-    res.status(400).json(err);
+    const files = req.files as Express.Multer.File[];
+    if (!files || files.length === 0) {
+      return res.status(400).json({ error: "No files uploaded" });
+    }
+
+    const fastApi = await axios.get(FAST_API_ENDPOINT);
+    const { data } = fastApi;
+
+    //  cleanup to delete files
+    await Promise.all(
+      files.map(async (file) => {
+        await fs.promises.unlink(file.path);
+      }),
+    );
+
+    res.json({ data: data });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-export default loginController;
+export default loginContoller;
