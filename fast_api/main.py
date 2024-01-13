@@ -40,8 +40,8 @@ def process_images(folder_path):
 @app.get("/process_images")
 async def read_item():
     try:
-        current_directory = os.path.dirname(os.path.realpath(__file__))
-        folder_path = os.path.join(current_directory, "..", "uploads")
+
+        folder_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "uploads")
         face_ids = process_images(folder_path)
 
         if not face_ids:

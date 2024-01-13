@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Request, Response } from "express";
-import { FAST_API_ENDPOINT, PORT } from "@/constants";
-import fs from "fs";
+import { FAST_API_ENDPOINT } from "@/constants";
+import User from "@/models/user";
 
 const loginContoller = async (req: Request, res: Response) => {
   try {
@@ -13,14 +13,11 @@ const loginContoller = async (req: Request, res: Response) => {
     const fastApi = await axios.get(FAST_API_ENDPOINT);
     const { data } = fastApi;
 
-    //  cleanup to delete files
-    await Promise.all(
-      files.map(async (file) => {
-        await fs.promises.unlink(file.path);
-      }),
-    );
-
-    res.json({ data: data });
+    await User.create({
+      uniqueFaceId: data,
+    })
+      .then((data) => res.json({ data: data }).status(200))
+      .catch((err) => res.status(500).json({ error: err }));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });

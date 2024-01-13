@@ -1,0 +1,54 @@
+version: "2"
+
+services:
+  postgres_db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: thabish
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: fds
+    ports:
+      - "5432:5432"
+
+  fastapi_app:
+    build:
+      context: ./fast_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./uploads:/app/uploads
+    restart: always
+    environment:
+      - POSTGRES_HOST=postgres_db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=thabish
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_DB=fds
+    depends_on:
+      - express_js_app
+
+  express_js_app:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    restart: always
+    environment:
+      - POSTGRES_HOST=postgres_db
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=thabish
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_DB=fds
+    volumes:
+      - ./uploads:/usr/src/app/uploads
+    depends_on:
+      - postgres_db
+
+  frontend_app:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    restart: always
+    depends_on:
+      - express_js_app

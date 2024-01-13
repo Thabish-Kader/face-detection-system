@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import RiveComponent, { useRive } from "@rive-app/react-canvas";
 import { sendUserPic } from "@/utils/apis";
+import { useRouter } from "next/navigation";
 
 type RiveCanvasProps = {
   setIsWebcamOn: Dispatch<SetStateAction<boolean>>;
@@ -31,7 +32,7 @@ export const RiveCanvas = ({
   let captureCount = 0;
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
-
+  const router = useRouter();
   const handleCapturePhoto = () => {
     if (isWebcamOn) {
       return;
@@ -47,7 +48,7 @@ export const RiveCanvas = ({
             (prevFiles) => [...prevFiles, file].filter(Boolean) as File[]
           );
         }
-        if (captureCount === 5) {
+        if (captureCount === 3) {
           setIsWebcamOn(false);
           clearInterval(intervalIdRef.current!);
           intervalIdRef.current = null;
@@ -58,8 +59,8 @@ export const RiveCanvas = ({
   };
 
   useEffect(() => {
-    if (imageFiles?.length === 5) {
-      sendUserPic(imageFiles);
+    if (imageFiles?.length === 3) {
+      sendUserPic(imageFiles, router);
     }
   }, [imageFiles]);
 
