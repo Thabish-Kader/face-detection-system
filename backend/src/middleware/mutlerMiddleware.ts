@@ -16,13 +16,4 @@ const storage = mutler.diskStorage({
   },
 });
 
-// const storage = mutler.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, path.join(__dirname, "uploads"));
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, file.originalname);
-//   },
-// });
-
 export { mutlerMiddleware, storage };
